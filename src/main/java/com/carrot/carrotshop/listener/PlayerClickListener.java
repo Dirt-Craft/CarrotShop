@@ -20,6 +20,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.carrot.carrotshop.CarrotShop;
+import com.carrot.carrotshop.shop.Cmd;
 import com.carrot.carrotshop.Lang;
 import com.carrot.carrotshop.ShopConfig;
 import com.carrot.carrotshop.ShopsData;
@@ -109,10 +110,19 @@ public class PlayerClickListener {
 				event.setCancelled(true);
 				Shop.build(player, optLoc.get());
 			}
-		} else if (ShopsData.hasMultipleCurrencies() && optItem.isPresent() && optItem.get().getType().equals(ItemTypes.STICK)
+		} else if (optItem.isPresent() && optItem.get().getType().equals(ItemTypes.STICK)
 				&& (optLoc.get().getBlockType() == BlockTypes.STANDING_SIGN || optLoc.get().getBlockType() == BlockTypes.WALL_SIGN)) {
 			Optional<List<Shop>> optShop = ShopsData.getShops(optLoc.get());
-			if (optShop.isPresent()) {
+			if (CarrotShop.getLinkedCommand(player.getUniqueId())!=null && optShop.isPresent() && optShop.get().get(0) instanceof Cmd) {
+				for (Shop shop : optShop.get()){
+					if (shop instanceof Cmd) {
+						event.setCancelled(true);
+						((Cmd)shop).setID(CarrotShop.getLinkedCommand(player.getUniqueId()));
+						player.sendMessage(Text.of(TextColors.DARK_GREEN, Lang.COMANDSIGN_LINKED_SIGN));
+						break;
+					}
+				}
+			} else if (ShopsData.hasMultipleCurrencies()){
 				event.setCancelled(true);
 				for (Shop shop : optShop.get()) {
 					if (shop.canLoopCurrency(player)) {
@@ -120,7 +130,7 @@ public class PlayerClickListener {
 						if (shop.hasCurrency())
 							player.sendMessage(Text.of(TextColors.DARK_GREEN, Lang.split(Lang.CURRENCY_VALUE, "%url%", 0), TextColors.YELLOW, shop.getCurrency().getDisplayName(), TextColors.DARK_GREEN, Lang.split(Lang.CURRENCY_VALUE, "%url%", 1)));
 						else
-							player.sendMessage(Text.of(TextColors.DARK_GREEN, Lang.CURRENCY_SERVER));							
+							player.sendMessage(Text.of(TextColors.DARK_GREEN, Lang.CURRENCY_SERVER));
 					}
 				}
 			}

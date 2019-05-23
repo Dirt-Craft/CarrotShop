@@ -10,6 +10,10 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 public class Lang
 {
+	public static String COMANDSIGN_UNLINKED = "Commandsign Command Unlinked";
+	public static String COMANDSIGN_LINKED = "Commandsign Command Linked";
+	public static String COMANDSIGN_LINKED_SIGN = "Successfully linked command";
+
 	public static String HELP_DESC_CMD_REPORT = "Generare a CarrotShop report";
 	public static String HELP_DESC_CMD_SREPORT = "Generare a CarrotShop report for iSigns";
 	public static String HELP_DESC_CMD_OREPORT = "Generate a CarrotShop report for another player";
@@ -20,9 +24,19 @@ public class Lang
 	public static String HELP_DESC_CMD_CONFIG = "Change or reload config of the plugin";
 	public static String HELP_DESC_CMD_MAIN = "Main CarrotShop command";
 	public static String HELP_DESC_CMD_IMPORT = "Import shop data from another plugin";
+	public static String HELP_DESC_CMD_COMMANDSIGN = "Commands relating to command signs";
+	public static String HELP_DESC_CMD_COMMANDSIGN_LINK = "links the commandsign to a commandsign command";
+    public static String HELP_DESC_CMD_COMMANDSIGN_LIST = "lists all commandsign commands";
+    public static String HELP_DESC_CMD_COMMANDSIGN_REMOVE = "removes a commandsign command";
+	public static String HELP_DESC_CMD_COMMANDSIGN_SET = "Sets a commandsign command";
+
+	public static String HOVER_ACTION_REMOVE = "Remove";
+	public static String HOVER_ACTION_LINK = "Link";
 	
 	public static String HELP_HEADER_CMD_MAIN = "/carrotshop";
 	public static String HELP_HEADER_CMD_CONFIG = "/carrotshop config";
+	public static String HELP_HEADER_CMD_COMMANDSIGN = "/carrotshop command";
+	public static String HELP_HEADER_CMD_COMMANDSIGN_LIST = "/carrotshop command list";
 
 	public static String STATUS_ON = "ON";
 	public static String STATUS_OFF = "OFF";

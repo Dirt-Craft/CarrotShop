@@ -3,6 +3,7 @@ package com.carrot.carrotshop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,11 @@ import com.carrot.carrotshop.command.ShopConfigCurrencyExecutor;
 import com.carrot.carrotshop.command.ShopConfigExecutor;
 import com.carrot.carrotshop.command.ShopConfigReloadExecutor;
 import com.carrot.carrotshop.command.ShopImportExecutor;
+import com.carrot.carrotshop.command.ShopCommandSignLinkExecutor;
+import com.carrot.carrotshop.command.ShopCommandSignListExecutor;
+import com.carrot.carrotshop.command.ShopCommandSignMainExecutor;
+import com.carrot.carrotshop.command.ShopCommandSignRemoveExecutor;
+import com.carrot.carrotshop.command.ShopCommandSignSetExecutor;
 import com.carrot.carrotshop.command.ShopMainExecutor;
 import com.carrot.carrotshop.command.ShopReportExecutor;
 import com.carrot.carrotshop.command.ShopServerReportExecutor;
@@ -51,6 +57,7 @@ public class CarrotShop {
 	private EconomyService economyService = null;
 
 	private static List<UUID> noSpam = new ArrayList<UUID>();
+	private static HashMap<UUID,String> commandLinks = new HashMap<UUID, String>();
 
 	@Listener
 	public void onInit(GameInitializationEvent event) throws IOException
@@ -115,12 +122,52 @@ public class CarrotShop {
 				.child(shopConfigCurrency, "currency")
 				.child(shopConfigReload, "reload")
 				.build();
-		
+
 		CommandSpec shopImport = CommandSpec.builder()
 				.description(Text.of(Lang.HELP_DESC_CMD_IMPORT))
 				.permission("carrotshop.import")
 				.executor(new ShopImportExecutor(defaultConfigDir))
 				.arguments(GenericArguments.optional(GenericArguments.string(Text.of("plugin"))))
+				.build();
+
+		CommandSpec ShopCommandSignLink = CommandSpec.builder()
+				.description(Text.of(Lang.HELP_DESC_CMD_COMMANDSIGN_LINK))
+				.permission("carrotshop.commandsign.link")
+				.executor(new ShopCommandSignLinkExecutor())
+				.arguments(GenericArguments.optional(GenericArguments.string(Text.of("name"))))
+				.build();
+
+		CommandSpec ShopCommandSignList = CommandSpec.builder()
+				.description(Text.of(Lang.HELP_DESC_CMD_COMMANDSIGN_LIST))
+				.permission("carrotshop.commandsign.list")
+				.executor(new ShopCommandSignListExecutor())
+				.build();
+
+		CommandSpec ShopCommandSignRemove = CommandSpec.builder()
+				.description(Text.of(Lang.HELP_DESC_CMD_COMMANDSIGN_REMOVE))
+				.permission("carrotshop.commandsign.remove")
+				.executor(new ShopCommandSignRemoveExecutor())
+				.arguments(
+						GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))),
+						GenericArguments.flags().flag("l").buildWith(GenericArguments.none()))
+				.build();
+
+		CommandSpec ShopCommandSignSet = CommandSpec.builder()
+				.description(Text.of(Lang.HELP_DESC_CMD_COMMANDSIGN_SET))
+				.permission("carrotshop.commandsign.set")
+				.executor(new ShopCommandSignSetExecutor())
+				.arguments(
+						GenericArguments.onlyOne(GenericArguments.string(Text.of("name"))),
+						GenericArguments.remainingJoinedStrings(Text.of("command")))
+				.build();
+
+		CommandSpec shopCommandSign = CommandSpec.builder()
+				.description(Text.of(Lang.HELP_DESC_CMD_COMMANDSIGN))
+				.executor(new ShopCommandSignMainExecutor())
+				.child(ShopCommandSignLink, "link")
+				.child(ShopCommandSignList, "list")
+				.child(ShopCommandSignRemove, "remove")
+				.child(ShopCommandSignSet, "set")
 				.build();
 		
 		CommandSpec shopMain = CommandSpec.builder()
@@ -132,6 +179,7 @@ public class CarrotShop {
 				.child(shopServerReport, "serverreport", "server", "servreport", "sr")
 				.child(shopConfig, "config")
 				.child(shopImport, "import")
+				.child(shopCommandSign, "command", "cmd")
 				.build();
 
 		Sponge.getCommandManager().register(plugin, shopReport, "shopreport", "carrotshopreport", "cr", "sr", "carrotreport", "creport", "sreport");
@@ -148,6 +196,18 @@ public class CarrotShop {
 	@Listener
 	public void onStop(GameStoppingServerEvent event) {
 		ShopsData.unload();
+	}
+
+	public static void setLinkedCommand(UUID player, String command){
+		commandLinks.put(player,command);
+	}
+
+	public static String getLinkedCommand(UUID player){
+		return commandLinks.getOrDefault(player, null);
+	}
+
+	public static void removeLinkedCommand(UUID player){
+		commandLinks.remove(player);
 	}
 
 	public static CarrotShop getInstance()

@@ -60,6 +60,10 @@ public class Cmd extends Shop {
 		done(player);
 	}
 
+	public void setID(String id){
+		this.id = id;
+	}
+
 	@Override
 	public void info(Player player) {
 		if (CarrotShop.getEcoService() != null)
