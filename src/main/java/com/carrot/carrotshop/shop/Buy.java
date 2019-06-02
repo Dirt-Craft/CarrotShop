@@ -2,9 +2,11 @@ package com.carrot.carrotshop.shop;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Stack;
 
+import io.github.nucleuspowered.nucleus.api.NucleusAPI;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
@@ -45,6 +47,24 @@ public class Buy extends Shop {
 	public Buy() {
 	}
 
+	private boolean isWorthValid(float price, Inventory items){
+			if(!NucleusAPI.getServerShopService().isPresent()){
+				return true; // Nucleus not found
+			}
+			double totalPrice = 0;
+			for(Inventory item : items.slots()){
+				try {
+					totalPrice += NucleusAPI.getServerShopService().get().getBuyPrice(item.peek().get()).get();
+				}catch(NoSuchElementException e){
+					continue;
+				}// Never used optionals before. Dont judge!
+			}
+			if(price < totalPrice){
+				return false;
+			}
+		return true;
+	}
+
 	public Buy(Player player, Location<World> sign) throws ExceptionInInitializerError {
 		super(sign);
 		if (!player.hasPermission("carrotshop.create.buy"))
@@ -61,6 +81,9 @@ public class Buy extends Shop {
 		price = getPrice(sign);
 		if (price < 0)
 			throw new ExceptionInInitializerError(Lang.SHOP_PRICE);
+		if (!isWorthValid(price, items)){
+			throw new ExceptionInInitializerError(Lang.SHOP_PRICE_LOW);
+		}
 		float cost = ShopConfig.getNode("cost", type).getFloat(0);
 		if (cost > 0) {
 			UniqueAccount buyerAccount = CarrotShop.getEcoService().getOrCreateAccount(player.getUniqueId()).get();

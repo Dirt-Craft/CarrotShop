@@ -91,6 +91,8 @@ public class Lang
 	public static String SHOP_FORMAT_TRADE = "Trade %items% and get %items%?";
 	public static String SHOP_CMD_DONE = "You can configure commands from file %id%.txt in the config folder. See console for complete path";
 
+	public static String SHOP_PRICE_LOW = "Please don't go under /worth prices!";
+
 	public static String SHOP_EMPTYHAND = "You may only use shops with empty hands";
 	public static String SHOP_EMPTY = "This shop is empty!";
 	public static String SHOP_FULL = "This shop is full!";
