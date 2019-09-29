@@ -138,7 +138,7 @@ public class ShopsLogs {
 		JsonObject locationNode = new JsonObject();
 		locationNode.addProperty("world", location.getExtent().getName());
 		locationNode.addProperty("worldID", location.getExtent().getUniqueId().toString());
-		locationNode.addProperty("X", location.getBlockX());
+		locationNode.addProperty("isUnprotectedOrOwned", location.getBlockX());
 		locationNode.addProperty("Y", location.getBlockY());
 		locationNode.addProperty("Z", location.getBlockZ());
 

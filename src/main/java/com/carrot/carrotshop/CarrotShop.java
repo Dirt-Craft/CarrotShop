@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import com.carrot.carrotshop.api.ClaimApi;
+import net.minecraftforge.fml.common.Loader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -58,10 +60,22 @@ public class CarrotShop {
 
 	private static List<UUID> noSpam = new ArrayList<UUID>();
 	private static HashMap<UUID,String> commandLinks = new HashMap<UUID, String>();
+	public static ClaimApi claimApi;
 
 	@Listener
 	public void onInit(GameInitializationEvent event) throws IOException
 	{
+		if(Loader.isModLoaded("ftbutilities")){
+			try {
+				claimApi = Class.forName("com.carrot.carrotshop.api.ClaimApi.FtbClaimApi").asSubclass(ClaimApi.class).newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e){
+				e.printStackTrace();
+				claimApi = new ClaimApi.DummyClaimApi();
+			}
+		} else {
+			claimApi = new ClaimApi.DummyClaimApi();
+		}
+
 		plugin = this;
 
 		rootDir = new File(defaultConfigDir, "carrotshop");
