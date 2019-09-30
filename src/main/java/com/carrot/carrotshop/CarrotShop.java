@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.carrot.carrotshop.api.ClaimApi;
+import net.minecraftforge.fml.common.Loader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -47,6 +49,7 @@ public class CarrotShop {
 	@Inject
 	@ConfigDir(sharedRoot = true)
 	private File defaultConfigDir;
+	public static ClaimApi claimApi;
 
 	private EconomyService economyService = null;
 
@@ -58,6 +61,17 @@ public class CarrotShop {
 		plugin = this;
 
 		rootDir = new File(defaultConfigDir, "carrotshop");
+
+		if(Loader.isModLoaded("ftbutilities")){
+			try {
+				claimApi = Class.forName("com.carrot.carrotshop.api.ClaimApi$FtbClaimApi").asSubclass(ClaimApi.class).newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e){
+				e.printStackTrace();
+				claimApi = new ClaimApi.DummyClaimApi();
+			}
+		} else {
+			claimApi = new ClaimApi.DummyClaimApi();
+		}
 
 		Lang.init(rootDir);
 		ShopConfig.init(rootDir);

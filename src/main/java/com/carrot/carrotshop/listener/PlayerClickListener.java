@@ -104,6 +104,7 @@ public class PlayerClickListener {
 		if (optItem.isPresent() && optItem.get().getType().equals(ItemTypes.REDSTONE)) {
 			if (optLoc.get().getBlockType() == BlockTypes.CHEST || optLoc.get().getBlockType() == BlockTypes.TRAPPED_CHEST || optLoc.get().getBlockType() == BlockTypes.LEVER) {
 				event.setCancelled(true);
+				if (CarrotShop.claimApi.isProtected(player, event.getTargetBlock())) return;
 				ShopsData.storeItemLocation(player, optLoc.get());
 			} else if (optLoc.get().getBlockType() == BlockTypes.STANDING_SIGN || optLoc.get().getBlockType() == BlockTypes.WALL_SIGN) {
 				event.setCancelled(true);
