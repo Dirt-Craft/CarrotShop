@@ -66,3 +66,4 @@ processResources {
         exclude "mcmod.info"
     }
 }
+compileJava.options.encoding = 'UTF-8'

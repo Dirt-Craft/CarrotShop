@@ -1,0 +1,19 @@
+[
+  {
+    "modid": "carrotshop",
+    "name": "CarrotShop",
+    "description": "A SignShop-like shop plugin for Sponge",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Carrot",
+      "ShinyAfro"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

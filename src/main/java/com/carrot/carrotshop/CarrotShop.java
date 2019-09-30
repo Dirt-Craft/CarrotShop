@@ -18,6 +18,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
@@ -37,7 +38,14 @@ import com.carrot.carrotshop.listener.PlayerClickListener;
 import com.carrot.carrotshop.listener.PlayerConnexionListener;
 import com.google.inject.Inject;
 
-@Plugin(id = "carrotshop", name = "CarrotShop", authors={"Carrot"}, url="https://github.com/TheoKah/CarrotShop")
+@Plugin(id = "carrotshop",
+		name = "CarrotShop",
+		authors={"Carrot"},
+		url="https://github.com/TheoKah/CarrotShop",
+		dependencies = {
+				@Dependency(id = "ftbutilities", optional = true)
+		}
+)
 public class CarrotShop {
 	private File rootDir;
 
