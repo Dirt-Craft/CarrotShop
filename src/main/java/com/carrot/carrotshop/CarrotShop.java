@@ -73,6 +73,7 @@ public class CarrotShop {
 		if(Loader.isModLoaded("ftbutilities")){
 			try {
 				claimApi = Class.forName("com.carrot.carrotshop.api.ClaimApi$FtbClaimApi").asSubclass(ClaimApi.class).newInstance();
+				Sponge.getEventManager().registerListeners(this, Class.forName("com.carrot.carrotshop.api.FtbUtilitiesIntegration").newInstance());
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e){
 				e.printStackTrace();
 				claimApi = new ClaimApi.DummyClaimApi();
