@@ -34,7 +34,8 @@ public class FtbUtilitiesIntegration {
 
         if (team == null) return;
         player.sendMessage(Text.of("Team Members:"));
-        player.sendMessage(Text.of(team.owner.getName()));
+        if (team.owner != null) player.sendMessage(Text.of(team.owner.getName()));
+        else player.sendMessage(Text.of("SERVER-TEAM"));
         List<ForgePlayer> members = team.getMembers();
         members.remove(team.owner);
         for (ForgePlayer member : members){
